@@ -395,6 +395,54 @@ curl http://localhost:4000/v1/chat/completions \
 </TabItem>
 </Tabs>
 
+#### **Grounding in Gemini 2.0**
+
+In Gemini 2.0 models (e.g. `gemini-exp-1206` and `gemini-2.0-flash-exp`), `googleSearchRetrieval` has been renamed to `googleSearch`:
+
+<Tabs>
+<TabItem value="sdk" label="SDK">
+
+```python 
+from litellm import completion 
+
+## SETUP ENVIRONMENT
+# !gcloud auth application-default login - run this to add vertex credentials to your env
+
+tools = [{"googleSearch": {}}] # 👈 ADD GOOGLE SEARCH
+
+resp = litellm.completion(
+                    model="vertex_ai/gemini-2.0-flash-exp",
+                    messages=[{"role": "user", "content": "Who won the world cup?"}],
+                    tools=tools,
+                )
+
+print(resp)
+```
+</TabItem>
+<TabItem value="proxy" label="PROXY">
+
+```bash
+curl http://localhost:4000/v1/chat/completions \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer sk-1234" \
+  -d '{
+    "model": "gemini-2.0-flash-exp",
+    "messages": [
+      {"role": "user", "content": "Hello, Claude!"}
+    ],
+   "tools": [
+        {
+            "googleSearch": {} 
+        }
+    ]
+  }'
+
+```
+
+</TabItem>
+</Tabs>
+
+
 #### **Moving from Vertex AI SDK to LiteLLM (GROUNDING)**
 
 
